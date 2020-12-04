@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View ,TextInput,TouchableOpacity,Alert,Image,Modal,ScrollView,KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
 import db from '../config';
 import firebase from 'firebase';
-import SantaAnimation from '../components/Santa'
+import SantaAnimation from '../components/Santa';
 
 export default class LoginScreen extends React.Component{
 
@@ -22,7 +22,7 @@ export default class LoginScreen extends React.Component{
 
     userLogin = (email,password) => {
         firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
-            return Alert.alert("Successful Login")
+            this.props.navigation.navigate('DonateBooks')
             
         })
         .catch((error)=> {
@@ -37,8 +37,16 @@ export default class LoginScreen extends React.Component{
             return Alert.alert("Passwors don't match")
         }
         else{
-
-        firebase.auth().createUserWithEmailAndPassword(email,password).then((response)=> {
+        firebase.auth().createUserWithEmailAndPassword(email,password).then(()=> {
+            
+            db.collection('users').add({
+                contactNo : this.state.contactNo,
+                firstName : this.state.firstName,
+                lastName : this.state.lastName,
+                userAddress : this.state.userAddress,
+                userEmail : this.state.email
+            })
+            
             return Alert.alert("User Added Successfully")
         })
 
@@ -46,13 +54,7 @@ export default class LoginScreen extends React.Component{
             var errorMessage = error.message
             return Alert.alert(errorMessage)
         })
-        db.collection('users').add({
-            contactNo : this.state.contactNo,
-            firstName : this.state.firstName,
-            lastName : this.state.lastName,
-            userAddress : this.state.userAddress,
-            userEmail : this.state.email
-        })
+       
     }
     }
 
@@ -67,10 +69,14 @@ export default class LoginScreen extends React.Component{
             <View style = {styles.modalContainer}>
                 <ScrollView>
                     <KeyboardAvoidingView>
-                        <Text> Registration </Text>
+                        <Text style = {{
+                            fontSize : 20,
+                            textAlign : 'center'
+                        }}> Registration </Text>
                         <TextInput
                         style = {styles.inputBox}
                         placeholder = "First Name"
+                        placeholderTextColor = 'white' 
                         maxLength = {8}
                         onChangeText = {(text)=> {
                             this.setState({
@@ -79,8 +85,9 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         placeholder = "Last Name"
+                        placeholderTextColor = 'white' 
                         maxLength = {8}
                         onChangeText = {(text)=> {
                             this.setState({
@@ -89,8 +96,9 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         placeholder = "Contact Number"
+                        placeholderTextColor = 'white' 
                         maxLength = {10}
                         keyboardType = {"numeric"}
                         onChangeText = {(text)=> {
@@ -100,8 +108,9 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         placeholder = "Address"
+                        placeholderTextColor = 'white' 
                         multiline = {true}
                         onChangeText = {(text)=> {
                             this.setState({
@@ -110,8 +119,9 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         placeholder = "Email"
+                        placeholderTextColor = 'white' 
                         keyboardType = 'email-address'
                         onChangeText = {(text)=> {
                             this.setState({
@@ -120,9 +130,10 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         secureTextEntry = {true}
                         placeholder = "Password"
+                        placeholderTextColor = 'white' 
                         onChangeText = {(text)=> {
                             this.setState({
                                password : text
@@ -130,9 +141,10 @@ export default class LoginScreen extends React.Component{
                         }}
                         />
                         <TextInput
-                        style = {styles.inputBox}
+                        style = {styles.inputBox1}
                         secureTextEntry = {true}
                         placeholder = "Confirm Password"
+                        placeholderTextColor = 'white' 
                         onChangeText = {(text)=> {
                             this.setState({
                                confirmPassword : text
@@ -144,7 +156,8 @@ export default class LoginScreen extends React.Component{
                             backgroundColor : 'black',
                             width : 200,
                             height : 30,
-                            justifyContent : 'center'
+                            justifyContent : 'center',
+                            marginTop : 20
                         }}
                         onPress = {() => {
                             this.userSignUp(this.state.email,this.state.password,this.state.confirmPassword)}
@@ -157,7 +170,8 @@ export default class LoginScreen extends React.Component{
                             backgroundColor : 'black',
                             width : 200,
                             height : 30,
-                            justifyContent : 'center'
+                            justifyContent : 'center',
+                            marginTop : 20
                         }} 
                          onPress = {()=> {
                              this.setState({
@@ -178,11 +192,13 @@ export default class LoginScreen extends React.Component{
     render(){
         return(
             <View style = {styles.container}>
-                <ScrollView>
+              <ScrollView>
                 <View style = {{backgroundColor : 'black'}}>
                     <Text style = {styles.title}> Book Santa App </Text>
                 </View>
+                {this.showModal()}
                 <View>
+                
                 <Image
                     style = {{
                         alignSelf : 'center',
@@ -193,6 +209,7 @@ export default class LoginScreen extends React.Component{
                     source = {require('../assets/Santa.png')}
                     />
                 </View>
+               
                 <View>
                 
                 <TouchableOpacity style = {styles.signButton}
@@ -258,6 +275,13 @@ const styles = StyleSheet.create({
           alignSelf : 'center',
           marginTop : 50
       },
+      inputBox1 : {
+        width : 250,
+        height : 50,
+        borderWidth : 2,
+        alignSelf : 'center',
+        marginTop : 30
+    },
       loginButton : {
           backgroundColor : 'black',
           width : 100,
@@ -286,12 +310,13 @@ const styles = StyleSheet.create({
       modalContainer : {
           justifyContent : 'center',
           alignItems : 'center',
+          alignSelf : 'center',
           backgroundColor : 'red',
           marginLeft : 50,
           marginTop : 100,
           marginRight : 50,
           marginBottom : 70,
-          width : 100,
-          height : 100
+          width : 300,
+          height : 400
       }
 })
