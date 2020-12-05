@@ -2,28 +2,52 @@ import React from 'react';
 import {Header,Icon,Badge} from 'react-native-elements';
 import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from 'react-navigation';
+import db from '../config';
 
-const BellIconWithBadge = (props) => {
-    return(
-        <View>
+export default class MyHeader extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            value : ''
+        }
+    }
+
+    getNumberOfUnreadNotifications = () => {
+        db.collection('allNotifications').where('status','==','unread')
+        .onSnapshot(snapshot => {
+            var unreadNotifications = snapshot.docs.map(doc === doc.data())
+            this.setState({
+                value : unreadNotifications.length
+            }) 
+        })
+    }
+
+    componentDidMount(){
+        this.getNumberOfUnreadNotifications()
+    }
+
+    BellIconWithBadge = (props) => {
+        return(
+            <View>
             <Icon
                 name = 'bell'
                 type = 'font-awesome'
                 color = 'white'
                 size = {25}
                 onPress = {() => 
-                    props.navigation.navigate('Notifications')
+                    this.props.navigation.navigate('Notifications')
                 }
             />
 
             <Badge
-                value = '1'
+                value = {this.state.value}
                 containerStyle = {{position : 'absolute',top : -4,right : -4}}
             />
         </View>
     )
 }
-const MyHeader = props => {
+ render(){
     return(
         <Header
             leftComponent = {
@@ -32,24 +56,26 @@ const MyHeader = props => {
                 type = 'font-awesome'
                 color = 'white'
                 onPress = {() => 
-                    props.navigation.toggleDrawer()
+                    this.props.navigation.toggleDrawer()
                 }
                 />       
             }
+            
             centerComponent = {{
-                text : props.title,
+                text : this.props.title,
                 style : {color : 'red', fontSize : 25}
             }}
 
             rightComponent = {
-                <BellIconWithBadge
-                {...props}
+                
+                <this.BellIconWithBadge
+                {...this.props}
                 />
             }
             
-            backgroundColor = 'black'
-        />
-    )
+             backgroundColor = 'black'
+            />
+        )
+    }
 }
 
-export default MyHeader;
