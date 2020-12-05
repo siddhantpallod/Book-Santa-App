@@ -54,13 +54,13 @@ export default class MyDonationsScreen extends React.Component{
     sendBook = (bookDetails) => {
         if(bookDetails.requestStatus === 'Send Book'){
             var donorStatus = 'Donar Interested'
-            db.collection('allDonations').doc(bookDetails.doc_id).update({
+            db.collection('allDonations').doc(bookDetails.requestId).update({
                 'requestStatus' : 'Donor Interested'
             })
             this.sendNotification(bookDetails,donorStatus)
         } else {
             var donorStatus = 'Book Sent'
-            db.collection('allDonations').doc(bookDetails.doc_id).update({
+            db.collection('allDonations').doc(bookDetails.requestId).update({
                 'requestStatus' : 'Book Sent'
             })
             this.sendNotification(bookDetails,donorStatus)
