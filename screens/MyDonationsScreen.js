@@ -52,15 +52,15 @@ export default class MyDonationsScreen extends React.Component{
     }
 
     sendBook = (bookDetails) => {
-        if(bookDetails.requestStatus === 'Send Book'){
+        if(bookDetails.requestStatus === 'Book Sent'){
             var donorStatus = 'Donar Interested'
-            db.collection('allDonations').doc(bookDetails.requestId).update({
+            db.collection('allDonations').doc(bookDetails.doc_id).update({
                 'requestStatus' : 'Donor Interested'
             })
             this.sendNotification(bookDetails,donorStatus)
         } else {
             var donorStatus = 'Book Sent'
-            db.collection('allDonations').doc(bookDetails.requestId).update({
+            db.collection('allDonations').doc(bookDetails.doc_id).update({
                 'requestStatus' : 'Book Sent'
             })
             this.sendNotification(bookDetails,donorStatus)
@@ -69,13 +69,20 @@ export default class MyDonationsScreen extends React.Component{
 
     getAllDonations = () => {
         this.requestRef = db.collection('allDonations').where('donorId', '==', this.state.email)
-        .onSnapshot(snapshot => {
-            var donations = snapshot.docs.map(document => document.data())
+        .onSnapshot((snapshot) => {
+            var allDonations = []
+            snapshot.docs.map((doc) => {
+                var donation = doc.data()
+                donation['doc_id'] = doc.id
+                allDonations.push(donation)
+            })
             this.setState({
-                allDonations : donations
+                allDonations : allDonations
             })
         })
-    }
+       
+     }
+    
     
     keyExtractor = (item,index) => index.toString()
     renderItem = ({item , I}) => (
@@ -91,11 +98,16 @@ export default class MyDonationsScreen extends React.Component{
             />}
             rightElement = {
             <TouchableOpacity 
+            style = {{
+                backgroundColor : item.requestStatus === 'Book Sent' ? 'blue' : 'green'
+            }}
             onPress = {()=> {
                 this.sendBook(item)
             }}
             >
-                <Text> {item.requestStatus === 'Book Sent' ? 'Book Sent' : 'Send Book'} </Text>
+                <Text style = {{
+                    color : 'black'
+                }}> {item.requestStatus === 'Book Sent' ? 'Book Sent' : 'Send Book'} </Text>
             </TouchableOpacity>}
 
             bottomDivider
@@ -123,11 +135,13 @@ export default class MyDonationsScreen extends React.Component{
                 <View>
                     {this.state.allDonations.length === 0
                     ? (<Text> List Of All Book Donations </Text>) 
-                    : (<FlatList
+                    : (
+                    <FlatList
                         keyExtractor = {this.keyExtractor}
                         data = {this.state.allDonations}
                         renderItem = {this.renderItem}
-                        />)}
+                        />
+                        )}
                     
                 </View>
             </View>

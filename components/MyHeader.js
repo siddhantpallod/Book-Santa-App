@@ -1,8 +1,8 @@
 import React from 'react';
 import {Header,Icon,Badge} from 'react-native-elements';
 import { StyleSheet, Text, View } from 'react-native';
-import { createDrawerNavigator } from 'react-navigation';
 import db from '../config';
+
 
 export default class MyHeader extends React.Component{
 
@@ -13,10 +13,10 @@ export default class MyHeader extends React.Component{
         }
     }
 
-    getNumberOfUnreadNotifications = () => {
+    getNumberOfUnreadNotifications(){
         db.collection('allNotifications').where('status','==','unread')
-        .onSnapshot(snapshot => {
-            var unreadNotifications = snapshot.docs.map(doc === doc.data())
+        .onSnapshot((snapshot) => {
+            var unreadNotifications = snapshot.docs.map((doc) => doc.data())
             this.setState({
                 value : unreadNotifications.length
             }) 
@@ -27,7 +27,7 @@ export default class MyHeader extends React.Component{
         this.getNumberOfUnreadNotifications()
     }
 
-    BellIconWithBadge = (props) => {
+    BellIconWithBadge = () => {
         return(
             <View>
             <Icon

@@ -2,13 +2,13 @@ import React from 'react';
 import {View,Text,FlatList} from 'react-native';
 import firebase from 'firebase';
 import db from '../config';
-import {ListItem,Icon, BottomSheet} from 'react-native-elements';
+import {ListItem,Icon} from 'react-native-elements';
 import MyHeader from '../components/MyHeader';
 
 export default class NotificationScreen extends React.Component{
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             email : firebase.auth().currentUser.email,
             allNotifications : []
@@ -19,11 +19,11 @@ export default class NotificationScreen extends React.Component{
     getNotification = () => {
         this.notificationRef = db.collection('allNotifications')
         .where('status', '==', 'unread').where('recieverUserID', '==' , this.state.email)
-        .onSnapshot(snapshot => {
+        .onSnapshot((snapshot) => {
             var notifications = []
-            snapshot.docs.map(doc => {
+            snapshot.docs.map((doc) => {
                 var details = doc.data()
-                details['doc_id'] === doc.id
+                details['doc_id'] = doc.id
                 notifications.push(details)
             })
             this.setState({
