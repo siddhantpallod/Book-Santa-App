@@ -17,13 +17,16 @@ export default class NotificationScreen extends React.Component{
     }
 
     getNotification = () => {
+        alert("Email " + this.state.email)
         this.notificationRef = db.collection('allNotifications')
-        .where('status', '==', 'unread').where('recieverUserID', '==' , this.state.email)
+        .where('status', '==', 'unread').where('recieverUserID', '==' , "siddhantpallod@gmail.com")
         .onSnapshot((snapshot) => {
             var notifications = []
             snapshot.docs.map((doc) => {
                 var details = doc.data()
+                alert("Data " + details)
                 details['doc_id'] = doc.id
+                alert("details :" + doc.bookName)
                 notifications.push(details)
             })
             this.setState({
@@ -43,6 +46,7 @@ export default class NotificationScreen extends React.Component{
 
     keyExtracter = (item,index) => index.toString()
     renderItem = ({item,I}) => {
+        
         <ListItem
             key = {I}
             leftElement = {
@@ -51,12 +55,13 @@ export default class NotificationScreen extends React.Component{
                     type = 'font-awesome'
                 />
             }
+            
             title = {item.bookName}
             subtitle = {item.message}
 
             bottomDivider
         />
-        
+            
     }
 
     render(){
@@ -83,5 +88,5 @@ export default class NotificationScreen extends React.Component{
                 </View>
             </View>
         )
-        }
+    }
 }

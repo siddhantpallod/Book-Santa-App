@@ -21,14 +21,15 @@ export default class LoginScreen extends React.Component{
     }
 
     userLogin = (email,password) => {
-        firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
-            this.props.navigation.navigate('DonateBooks')
+        this.props.navigation.navigate('DonateBooks')
+        // firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
+        //     this.props.navigation.navigate('DonateBooks')
             
-        })
-        .catch((error)=> {
-            var errorMessage = error.message
-            return Alert.alert(errorMessage)
-        })
+        // })
+        // .catch((error)=> {
+        //     var errorMessage = error.message
+        //     return Alert.alert(errorMessage)
+        // })
         }
     
 

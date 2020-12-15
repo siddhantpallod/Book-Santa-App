@@ -59,7 +59,7 @@ export default class DonateScreen extends React.Component{
         return(
             <View>
                 <MyHeader
-                title = 'Donate Book'
+                title = 'Donate Book' navigation ={this.props.navigation}
                 />
                 {this.state.requestedBooks.length === 0
                 ? (

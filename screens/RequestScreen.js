@@ -39,7 +39,7 @@ export default class RequestScreen extends React.Component{
         return(
             <View>
                <MyHeader
-               title = 'Request Book'
+               title = 'Request Book' navigation ={this.props.navigation}
                />
                <KeyboardAvoidingView>
                    <TextInput
