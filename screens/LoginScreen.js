@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View ,TextInput,TouchableOpacity,Alert,Image,Modal,ScrollView,KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, Text, View ,TextInput,TouchableOpacity,Alert,Image,Modal,ScrollView,KeyboardAvoidingView} from 'react-native';
 import db from '../config';
 import firebase from 'firebase';
 import SantaAnimation from '../components/Santa';
@@ -21,15 +21,14 @@ export default class LoginScreen extends React.Component{
     }
 
     userLogin = (email,password) => {
-        this.props.navigation.navigate('DonateBooks')
-        // firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
-        //     this.props.navigation.navigate('DonateBooks')
-            
-        // })
-        // .catch((error)=> {
-        //     var errorMessage = error.message
-        //     return Alert.alert(errorMessage)
-        // })
+            firebase.auth().signInWithEmailAndPassword(email,password)
+            .then(()=>{
+             this.props.navigation.navigate('DonateBooks')
+         })
+         .catch((error)=> {
+             var errorMessage = error.message
+             return Alert.alert(errorMessage)
+        })
         }
     
 
