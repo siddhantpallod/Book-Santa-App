@@ -15,9 +15,11 @@ export const AppTabNavigator = createBottomTabNavigator({
         source = {require('../assets/request list.png')}
         />,
         tabBarLabel : 'DonateBooks'
+        
     }
     },
     RequestBooks : {screen : RequestScreen,
+        
         navigationOptions : {
             tabBarIcon : <Image
             style = {{
@@ -28,5 +30,6 @@ export const AppTabNavigator = createBottomTabNavigator({
             />,
             tabBarLabel : 'RequestBooks'
         }
+        
     }
 })

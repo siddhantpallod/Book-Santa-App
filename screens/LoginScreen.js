@@ -16,20 +16,20 @@ export default class LoginScreen extends React.Component{
             contactNo : '',
             userAddress : '',
             confirmPassword : '',
-            isModalVisible : false
+            isModalVisible : false,
         }
     }
 
     userLogin = (email,password) => {
-            firebase.auth().signInWithEmailAndPassword(email,password)
-            .then(()=>{
+         firebase.auth().signInWithEmailAndPassword(email,password)
+         .then(()=>{
              this.props.navigation.navigate('DonateBooks')
          })
          .catch((error)=> {
-             var errorMessage = error.message
-             return Alert.alert(errorMessage)
+            var errorMessage = error.message
+            return Alert.alert(errorMessage)
         })
-        }
+       }
     
 
     userSignUp = (email,password,confirmPassword) => {
@@ -44,7 +44,8 @@ export default class LoginScreen extends React.Component{
                 firstName : this.state.firstName,
                 lastName : this.state.lastName,
                 userAddress : this.state.userAddress,
-                userEmail : this.state.email
+                userEmail : this.state.email,
+                isBookRequestActive : false
             })
             
             return Alert.alert("User Added Successfully")

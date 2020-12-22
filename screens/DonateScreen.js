@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View,FlatList , TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View,FlatList , TouchableOpacity,ImageBackground} from 'react-native';
 import MyHeader from '../components/MyHeader';
 import db from '../config';
 import firebase from 'firebase';
@@ -58,22 +58,24 @@ export default class DonateScreen extends React.Component{
     render(){
         return(
             <View>
-                <MyHeader
+              <MyHeader
                 title = 'Donate Book' navigation ={this.props.navigation}
                 />
+                
                 {this.state.requestedBooks.length === 0
                 ? (
                     <View>
                         <Text> List Of All Requested Books </Text>
                      </View>   
                 )
-                : (<FlatList
+                : (
+                <FlatList
                     keyExtractor = {this.keyExtracter}
                     data = {this.state.requestedBooks}
                     renderItem = {this.renderItem}
-                />)
-                }
+                />
 
+                )}
             </View>
         )
     }
@@ -94,6 +96,12 @@ const styles = StyleSheet.create({
             color : 'white',
             textAlign : 'center',
             fontSize : 20
+          },
+          
+          image: {
+              width : 1200,
+              height : 1000,
+              flex : 1
           }
     
 })

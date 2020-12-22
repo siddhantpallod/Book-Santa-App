@@ -100,7 +100,7 @@ export default class RecieverDetailsScreen extends React.Component{
 
                    centerComponent = {{
                     text : 'Donate Books',
-                    style : {color : 'red'}
+                    style : {color : 'red',fontSize : 20}
                    }}
                    backgroundColor = 'black'
                    />
@@ -136,13 +136,22 @@ export default class RecieverDetailsScreen extends React.Component{
                { this.state.recieverId != this.state.email
                ? (
                   <TouchableOpacity 
+                  style = {{
+                    backgroundColor : 'black',
+                    width : 100,
+                    height : 50,
+                    borderWidth : 2,
+                    borderRadius : 11,
+                    alignSelf : 'center',
+                    borderColor : 'blue',
+                    marginTop : 30
+                  }}
                   onPress = {()=> {
                       this.updateBookStatus()
                       this.addNotifications()
                       this.props.navigation.navigate('MyDonations')
-                  }}
-                  > 
-                    <Text> Donate </Text>    
+                  }}> 
+                    <Text style = {{color : 'white', fontSize : 20,textAlign : 'center'}}> Donate </Text>    
                   </TouchableOpacity> 
                )
             : null
